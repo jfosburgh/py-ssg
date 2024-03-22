@@ -47,7 +47,7 @@ def heading_to_html_node(heading_block):
 
 
 def code_to_html_node(code_block):
-    text = code_block.split('```')[1]
+    text = code_block.split('```')[1].strip()
     return ParentNode(
         "pre", 
         [ParentNode("code", text_to_html_nodes(text))]

@@ -63,8 +63,9 @@ def text_node_to_html_node(text_node):
     value = text_node.text
     props = None
     if text_node.url:
-        props = {"href": text_node.url}
         if tag == "img":
-            props["alt"] = value
+            props = {"src": text_node.url, "alt": value}
             value = ""
+        else:
+            props = {"href": text_node.url}
     return LeafNode(tag, value, props)

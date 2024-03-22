@@ -21,14 +21,14 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             new_nodes.append(node)
             continue
         parts = node.text.split(delimiter)
-        if len(parts) % 3 != 0:
-            raise ValueError(f"{node.text} is not valid markdown")
+        if len(parts) % 2 != 1:
+            raise ValueError(f"{node.text} is not valid markdown\nDelimiter: {delimiter}")
         for i in range(len(parts)):
             if parts[i] == '':
-                if i % 3 == 1:
+                if i % 2 == 1:
                     raise ValueError(f"{node.text} has no content within delimiter {delimiter}")
                 continue
-            if i % 3 == 1:
+            if i % 2 == 1:
                 new_nodes.append(TextNode(parts[i], text_type))
             else:
                 new_nodes.append(TextNode(parts[i], node.text_type))
@@ -93,7 +93,7 @@ def extract_markdown_images(text):
 
 
 def extract_markdown_links(text):
-    return re.findall(r" \[(.*?)\]\((.*?)\)", text)
+    return re.findall(r"\[(.*?)\]\((.*?)\)", text)
 
 
 def text_to_textnodes(text):
@@ -102,5 +102,7 @@ def text_to_textnodes(text):
         nodes = split_nodes_delimiter(nodes, delimiter, text_type)
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
+    
+    # print(f"\n\nTEXT:\n{text}\nNODES:\n{'\n'.join([str(node) for node in nodes])}")
 
     return nodes
